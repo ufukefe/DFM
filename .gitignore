@@ -1,0 +1,7 @@
+
+*.pyc
+*.ppm
+data/H_1_4
+*.mat
+python/.DS_Store
+.DS_Store
