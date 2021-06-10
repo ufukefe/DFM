@@ -51,6 +51,12 @@ class DeepFeatureMatcher(torch.nn.Module):
         activations_A = self.model.forward(inp_A)
         activations_B = self.model.forward(inp_B)
         
+        # initiate warped image, its activations, initial&final estimate of homography
+        img_C = img_B
+        activations_C = activations_B
+        H_init = np.eye(3, dtype=np.double)
+        H = np.eye(3, dtype=np.double)
+            
         if self.enable_two_stage:
             
             # initiate matches
@@ -64,7 +70,8 @@ class DeepFeatureMatcher(torch.nn.Module):
             src = points_B.t().numpy()
             dst = points_A.t().numpy()
             
-            H_init, _ = cv.findHomography(src, dst, method=cv.RANSAC, ransacReprojThreshold=16*np.sqrt(2)+1, maxIters=5000, confidence=0.9999)
+            if points_A.size(1) >= 4:
+                H_init, _ = cv.findHomography(src, dst, method=cv.RANSAC, ransacReprojThreshold=16*np.sqrt(2)+1, maxIters=5000, confidence=0.9999)
                
             # warp image B onto image A 
             img_C = cv.warpPerspective(img_B, H_init, (img_A.shape[1],img_A.shape[0]))
@@ -85,14 +92,6 @@ class DeepFeatureMatcher(torch.nn.Module):
             # get activations of the warped image
             activations_C = self.model.forward(inp_C)
      
-        else:
-            
-            H_init = np.eye(3, dtype=np.double)
-            
-            img_C = img_B
-            
-            activations_C = activations_B
-    
         # initiate matches
         points_A, points_C = dense_feature_matching(activations_A[-2], activations_C[-2], self.ratio_th[-2])
 
@@ -128,7 +127,8 @@ class DeepFeatureMatcher(torch.nn.Module):
         src = points_B.t().numpy()
         dst = points_A.t().numpy()
         
-        H, _ = cv.findHomography(src, dst, method=cv.RANSAC, ransacReprojThreshold=3.0, maxIters=5000, confidence=0.9999)
+        if points_A.size(1) >= 4:
+            H, _ = cv.findHomography(src, dst, method=cv.RANSAC, ransacReprojThreshold=3.0, maxIters=5000, confidence=0.9999)
             
         # warp image B onto image A
         img_R = cv.warpPerspective(img_B, H, (img_A.shape[1],img_A.shape[0]))
@@ -269,6 +269,9 @@ def refine_points(points_A: torch.Tensor, points_B: torch.Tensor, activations_A:
     ch = d1.size(0)
     num_input_points = points_A.size(1)
     
+    if num_input_points == 0:
+        return points_A, points_B
+    
     # upsample points
     points_A *= 2
     points_B *= 2
@@ -280,13 +283,13 @@ def refine_points(points_A: torch.Tensor, points_B: torch.Tensor, activations_A:
     scores = torch.zeros(num_input_points, neighbors.size(0), neighbors.size(0))
     
     # for each point search the refined matches in given [finer] resolution
-    for i, n_A in enumerate(neighbors):        
+    for i, n_A in enumerate(neighbors):   
         for j, n_B in enumerate(neighbors):
-            
+
             # get features in the given neighborhood
             act_A = d1[:, points_A[1, :] + n_A[1], points_A[0, :] + n_A[0]].view(ch, -1)
             act_B = d2[:, points_B[1, :] + n_B[1], points_B[0, :] + n_B[0]].view(ch, -1)
-            
+
             # compute mse
             scores[:, i, j] = torch.sum(act_A * act_B, 0)
             
@@ -342,6 +345,12 @@ def refine_points(points_A: torch.Tensor, points_B: torch.Tensor, activations_A:
     
     refined_points_B = torch.stack((x[mask], y[mask]))
         
+    # if the number of refined matches is not enough to estimate homography,
+    # but number of initial matches is enough, use initial points
+    if refined_points_A.shape[1] < 4 and num_input_points > refined_points_A.shape[1]:
+        refined_points_A = points_A
+        refined_points_B = points_B
+    
     return refined_points_A, refined_points_B
     
 def mnn_ratio_matcher(descriptors1, descriptors2, ratio=0.8):
