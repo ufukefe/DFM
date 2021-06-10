@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 class DeepFeatureMatcher(torch.nn.Module):
     
-    def __init__(self, model: str = 'VGG19', device = None, bidirectional=True, enable_two_stage = True, ratio_th = [0.9, 0.9, 0.9, 0.9, 0.95, 1.0]):
+    def __init__(self, model: str = 'VGG19_BN', device = None, bidirectional=True, enable_two_stage = True, ratio_th = [0.9, 0.9, 0.9, 0.9, 0.95, 1.0]):
         
         super(DeepFeatureMatcher, self).__init__()
         
@@ -24,7 +24,12 @@ class DeepFeatureMatcher(torch.nn.Module):
         
         if model == 'VGG19':
             print('loading VGG19...')
-            self.model = Vgg19().to(self.device)
+            self.model = Vgg19(batch_normalization = False).to(self.device)
+            self.padding_n = 16
+            print('model is loaded.')
+        elif model == 'VGG19_BN':
+            print('loading VGG19_BN...')
+            self.model = Vgg19(batch_normalization = True).to(self.device)
             self.padding_n = 16
             print('model is loaded.')
         else:
@@ -199,12 +204,20 @@ class Vgg19(torch.nn.Module):
     
     # modified from the original @ https://github.com/chenyuntc/pytorch-book/blob/master/chapter08-neural_style/PackedVGG.py
     
-    def __init__(self, required_layers = [2, 7, 12, 21, 30, 32]):
+    def __init__(self, batch_normalization = True, required_layers = None):
         
+        if required_layers == None and batch_normalization:
+            required_layers = [3, 10, 17, 30, 43, 46]
+        elif required_layers == None:
+            required_layers = [2, 7, 12, 21, 30, 32]
+            
         # features 2，7，12，21, 30, 32: conv1_2,conv2_2,relu3_2,relu4_2,conv5_2,conv5_3
         super(Vgg19, self).__init__()
         
-        features = list(models.vgg19(pretrained = True).features)[:33] # get vgg features
+        if batch_normalization:
+            features = list(models.vgg19_bn(pretrained = True).features)[:47] # get vgg features
+        else:
+            features = list(models.vgg19(pretrained = True).features)[:33] # get vgg features
         
         self.features = torch.nn.ModuleList(features).eval() # construct network in eval mode
         

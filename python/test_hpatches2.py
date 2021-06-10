@@ -12,12 +12,12 @@ from DeepFeatureMatcher import DeepFeatureMatcher
 
 t0 = time.time()
 
-img_A = np.array(Image.open('../data/v_bark_1.ppm'))
-img_B = np.array(Image.open('../data/v_bark_3.ppm'))
+img_A = np.array(Image.open('../data/v_boat_1.ppm'))
+img_B = np.array(Image.open('../data/v_boat_4.ppm'))
 
 t1 = time.time()
 
-fm = DeepFeatureMatcher()
+fm = DeepFeatureMatcher(model = 'VGG19_BN')
 
 t2 = time.time()
 
