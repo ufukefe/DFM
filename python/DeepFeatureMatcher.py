@@ -67,7 +67,7 @@ class DeepFeatureMatcher(torch.nn.Module):
             # initiate matches
             points_A, points_B = dense_feature_matching(activations_A[-1], activations_B[-1], self.ratio_th[-1])
         
-            # upsample points
+            # upsample points (zero based)
             points_A = (points_A + 0.5) * 16 - 0.5
             points_B = (points_B + 0.5) * 16 - 0.5
         
@@ -117,9 +117,9 @@ class DeepFeatureMatcher(torch.nn.Module):
                 self.plot_keypoints(img_C, (points_C + 0.5) * (2**k) - 0.5, 'Bw level: ' + str(k))
         
     
-        # warp points form C to B
-        points_B = torch.from_numpy(np.linalg.inv(H_init)) @ torch.vstack((points_C + 0.5, torch.ones((1, points_C.size(1))))).double()
-        points_B = points_B[0:2, :] / points_B[2, :] - 0.5 
+        # warp points form C to B (H_init is zero-based, use zero-based points)
+        points_B = torch.from_numpy(np.linalg.inv(H_init)) @ torch.vstack((points_C, torch.ones((1, points_C.size(1))))).double()
+        points_B = points_B[0:2, :] / points_B[2, :]
     
         points_A = points_A.double()
         
