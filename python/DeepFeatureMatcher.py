@@ -313,7 +313,7 @@ def refine_points(points_A: torch.Tensor, points_B: torch.Tensor, activations_A:
             scores[:, i, j] = torch.sum(act_A * act_B, 0)
             
     # retrieve top 2 nearest neighbors from A2B
-    score_A, match_A = torch.topk(scores, 2, 2)
+    score_A, match_A = torch.topk(scores, 2, dim=2)
     score_A = 2 - 2 * score_A
     
     # compute lowe's ratio
@@ -324,7 +324,7 @@ def refine_points(points_A: torch.Tensor, points_B: torch.Tensor, activations_A:
     score_A2B = score_A[:, :, 0]
     
     # retrieve top 2 nearest neighbors from B2A
-    score_B, match_B = torch.topk(scores.transpose(2,1), 2, 2)
+    score_B, match_B = torch.topk(scores.transpose(2,1), 2, dim=2)
     score_B = 2 - 2 * score_B
     
     # compute lowe's ratio
@@ -341,13 +341,13 @@ def refine_points(points_A: torch.Tensor, points_B: torch.Tensor, activations_A:
     ind = torch.arange(num_input_points * neighbors.size(0))
     
     # ratio_B2A[:] = 1  # discard ratio21 to get the same results with matlab
-    mask = torch.logical_and(torch.min(ratio_A2B, ratio_B2A) < ratio_th,  (ind_B[ind_A] == ind).view(num_input_points, -1))
+    mask = torch.logical_and(torch.max(ratio_A2B, ratio_B2A) < ratio_th,  (ind_B[ind_A] == ind).view(num_input_points, -1))
     
     # set a large SSE score for mathces above ratio threshold and not on to one (score_A2B <=4 so use 5)
     score_A2B[~mask] = 5
     
     # each input point can generate max two output points, so discard the two with highest SSE 
-    _, discard = torch.topk(score_A2B, 2, 1)
+    _, discard = torch.topk(score_A2B, 2, dim=1)
     
     mask[torch.arange(num_input_points), discard[:, 0]] = 0
     mask[torch.arange(num_input_points), discard[:, 1]] = 0
