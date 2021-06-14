@@ -5,9 +5,9 @@ Created on Tue Apr  6 13:46:43 2021
 
 @author: kutalmisince
 """
-import torch
-import cv2 as cv
 import numpy as np
+import cv2 as cv
+import torch
 from torchvision import models, transforms
 from collections import namedtuple
 import matplotlib.pyplot as plt
@@ -78,6 +78,9 @@ class DeepFeatureMatcher(torch.nn.Module):
             if points_A.size(1) >= 4:
                 H_init, _ = cv.findHomography(src, dst, method=cv.RANSAC, ransacReprojThreshold=16*np.sqrt(2)+1, maxIters=5000, confidence=0.9999)
                
+            # opencv might return None for H, check for None
+            H_init = np.eye(3, dtype=np.double) if H_init is None else H_init
+            
             # warp image B onto image A 
             img_C = cv.warpPerspective(img_B, H_init, (img_A.shape[1],img_A.shape[0]))
             
@@ -134,15 +137,18 @@ class DeepFeatureMatcher(torch.nn.Module):
         
         if points_A.size(1) >= 4:
             H, _ = cv.findHomography(src, dst, method=cv.RANSAC, ransacReprojThreshold=3.0, maxIters=5000, confidence=0.9999)
-            
-        # warp image B onto image A
-        img_R = cv.warpPerspective(img_B, H, (img_A.shape[1],img_A.shape[0]))
-    
-        points_R = torch.from_numpy(H) @ torch.vstack((points_B + 0.5, torch.ones((1, points_B.size(1))))).double()
-        points_R = points_R[0:2, :] / points_R[2, :] - 0.5 
+          
+        # opencv might return None for H, check for None
+        H = np.eye(3, dtype=np.double) if H is None else H
         
         # display results
         if display_results:
+            # warp image B onto image A
+            img_R = cv.warpPerspective(img_B, H, (img_A.shape[1],img_A.shape[0]))
+        
+            points_R = torch.from_numpy(H) @ torch.vstack((points_B + 0.5, torch.ones((1, points_B.size(1))))).double()
+            points_R = points_R[0:2, :] / points_R[2, :] - 0.5 
+        
             self.plot_keypoints(img_A, points_A, 'A')
             self.plot_keypoints(img_B, points_B, 'B')
             self.plot_keypoints(img_C, points_C, 'B initial warp')

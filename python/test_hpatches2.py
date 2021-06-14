@@ -12,16 +12,17 @@ from DeepFeatureMatcher import DeepFeatureMatcher
 
 t0 = time.time()
 
-img_A = np.array(Image.open('../data/v_boat_1.ppm'))
-img_B = np.array(Image.open('../data/v_boat_4.ppm'))
+img_A = np.array(Image.open('../data/v_bark_1.ppm'))
+img_B = np.array(Image.open('../data/v_bark_6.ppm'))
 
 t1 = time.time()
 
-fm = DeepFeatureMatcher(model = 'VGG19_BN')
+fm = DeepFeatureMatcher(model = 'VGG19', ratio_th = [0.6, 0.6, 0.8, 0.9, 0.95, 1.0])
 
 t2 = time.time()
 
 H, H_init, points_A, points_B = fm.match(img_A, img_B,2)
+#H, H_init, pairs_terminal, pairs_adaptive, pairs_final = fm.match(img_A, img_B,2)
 
 t3 = time.time()
 
