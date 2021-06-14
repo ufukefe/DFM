@@ -65,7 +65,7 @@ class DeepFeatureMatcher(torch.nn.Module):
         if self.enable_two_stage:
             
             # initiate matches
-            points_A, points_B = dense_feature_matching(activations_A[-1], activations_B[-1], self.ratio_th[-1])
+            points_A, points_B = dense_feature_matching(activations_A[-1], activations_B[-1], self.ratio_th[-1], self.bidirectional)
         
             # upsample points (zero based)
             points_A = (points_A + 0.5) * 16 - 0.5
@@ -101,7 +101,7 @@ class DeepFeatureMatcher(torch.nn.Module):
             activations_C = self.model.forward(inp_C)
      
         # initiate matches
-        points_A, points_C = dense_feature_matching(activations_A[-2], activations_C[-2], self.ratio_th[-2])
+        points_A, points_C = dense_feature_matching(activations_A[-2], activations_C[-2], self.ratio_th[-2], self.bidirectional)
 
         # upsample and display points
         if display_results:            
@@ -109,7 +109,7 @@ class DeepFeatureMatcher(torch.nn.Module):
             self.plot_keypoints(img_C, (points_C + 0.5) * 16 - 0.5,  'Bw dense')
             
         for k in range(len(activations_A) - 3, -1, -1):
-            points_A, points_C = refine_points(points_A, points_C, activations_A[k], activations_C[k], self.ratio_th[k])
+            points_A, points_C = refine_points(points_A, points_C, activations_A[k], activations_C[k], self.ratio_th[k], self.bidirectional)
             
             if display_results == 2:
 
@@ -246,7 +246,7 @@ class Vgg19(torch.nn.Module):
         
         return vgg_outputs(*results)
     
-def dense_feature_matching(map_A, map_B, ratio_th):
+def dense_feature_matching(map_A, map_B, ratio_th, bidirectional=True):
     
     # normalize and reshape feature maps
     _, ch, h_A, w_A = map_A.size()
@@ -259,7 +259,7 @@ def dense_feature_matching(map_A, map_B, ratio_th):
     d2 /= torch.sqrt(torch.sum(torch.square(d2), 1)).unsqueeze(1)
     
     # perform matching
-    matches, scores = mnn_ratio_matcher(d1, d2, ratio_th)
+    matches, scores = mnn_ratio_matcher(d1, d2, ratio_th, bidirectional)
     
     # form a coordinate grid and convert matching indexes to image coordinates
     y_A, x_A = torch.meshgrid(torch.arange(h_A), torch.arange(w_A))
@@ -278,7 +278,7 @@ def dense_feature_matching(map_A, map_B, ratio_th):
     
     return points_A, points_B
   
-def refine_points(points_A: torch.Tensor, points_B: torch.Tensor, activations_A: torch.Tensor, activations_B: torch.Tensor, ratio_th = 0.9):
+def refine_points(points_A: torch.Tensor, points_B: torch.Tensor, activations_A: torch.Tensor, activations_B: torch.Tensor, ratio_th = 0.9, bidirectional = True):
 
     # normalize and reshape feature maps
     d1 = activations_A.squeeze(0) / activations_A.squeeze(0).square().sum(0).sqrt().unsqueeze(0)
@@ -340,7 +340,9 @@ def refine_points(points_A: torch.Tensor, points_B: torch.Tensor, activations_A:
     
     ind = torch.arange(num_input_points * neighbors.size(0))
     
-    # ratio_B2A[:] = 1  # discard ratio21 to get the same results with matlab
+    # if not bidirectional, do not use ratios from B to A
+    ratio_B2A[:] *= 1 if bidirectional else 0 # discard ratio21 to get the same results with matlab
+         
     mask = torch.logical_and(torch.max(ratio_A2B, ratio_B2A) < ratio_th,  (ind_B[ind_A] == ind).view(num_input_points, -1))
     
     # set a large SSE score for mathces above ratio threshold and not on to one (score_A2B <=4 so use 5)
@@ -372,7 +374,7 @@ def refine_points(points_A: torch.Tensor, points_B: torch.Tensor, activations_A:
     
     return refined_points_A, refined_points_B
     
-def mnn_ratio_matcher(descriptors1, descriptors2, ratio=0.8):
+def mnn_ratio_matcher(descriptors1, descriptors2, ratio=0.8, bidirectional = True):
     
     # Mutual NN + symmetric Lowe's ratio test matcher for L2 normalized descriptors.
     device = descriptors1.device
@@ -395,6 +397,9 @@ def mnn_ratio_matcher(descriptors1, descriptors2, ratio=0.8):
     # Save first NN.
     nn21 = nns[:, 0]
     
+    # if not bidirectional, do not use ratios from 2 to 1
+    ratios21[:] *= 1 if bidirectional else 0
+        
     # Mutual NN + symmetric ratio test.
     ids1 = torch.arange(0, sim.shape[0], device=device)
     mask = torch.min(ids1 == nn21[nn12], torch.min(ratios12 <= ratio, ratios21[nn12] <= ratio)) # discard ratios21 to get the same results with matlab

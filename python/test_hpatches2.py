@@ -17,7 +17,7 @@ img_B = np.array(Image.open('../data/v_bark_6.ppm'))
 
 t1 = time.time()
 
-fm = DeepFeatureMatcher(model = 'VGG19', ratio_th = [0.6, 0.6, 0.8, 0.9, 0.95, 1.0])
+fm = DeepFeatureMatcher(model = 'VGG19', ratio_th = [0.6, 0.6, 0.8, 0.9, 0.95, 1.0], bidirectional=False)
 
 t2 = time.time()
 
