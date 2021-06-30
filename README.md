@@ -41,9 +41,9 @@ python dfm.py --pairs image_pairs.txt
 You should make the **image_pairs.txt** file as following: <br /> <br />
 <path_of_image***1***A> <path_of_image***1***B> <br />
 <path_of_image***2***A> <path_of_image***2***B> <br />
-        .                 .                     <br />
-        .                 .                     <br />
-        .                 .                     <br />
+        .                                       <br />
+        .                                       <br />
+        .                                       <br />
 <path_of_image***n***A> <path_of_image***n***B>
 <br /> <br />
 
