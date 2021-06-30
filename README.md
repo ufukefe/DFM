@@ -7,18 +7,16 @@ Pytorch implementation of our paper DFM: A Performance Baseline for Deep Feature
 
 ![Overview](hierarchical_refinement.gif)
 
-<br />
-
 ## Setup Environment
 
-We strongly recommend using Anaconda. You can simply run the following to create the environment:
+We strongly recommend using Anaconda. Open a terminal in ./python folder, and simply run the following lines to create the environment:
 
 ````
 conda env create -f dfm.yml
 conda activte dfm
 ````
 **Dependencies** <br />
-If you do not use conda, DFM needs the following dependencies: <br />
+If you **do not** use conda, DFM needs the following dependencies: <br />
 (Versions are not strict; however, we have tried DFM with these specific versions.)
 
 - python == 3.7.1
@@ -29,6 +27,7 @@ If you do not use conda, DFM needs the following dependencies: <br />
 - pillow == 8.2.0
 - opencv == 3.4.2
 - ipykernel == 5.3.4
+- pyyaml == 5.4.1
 
 ## Enjoy with DFM!
 Now you are ready to test DFM by the following command:
@@ -56,7 +55,7 @@ python dfm.py --pairs image_pairs.txt --config config.xml
 
 <br />
 
-You can make changes to the following arguments in **config.xml**:
+You can make changes to the following arguments in **config.yml**:
 - Use ***enable_two_stage*** to enable or disable two stage approach (default: True) <br /> *(Note: Make it enable for planar scenes with significant viewpoint changes, otherwise disable.)*
 - Use ***model*** to change the pre-trained model (default: VGG19) <br /> *(Note: DFM only supports VGG19 and VGG19_BN right now, we plan to add other backbones)*
 - Use ***ratio_th*** to change ratio test thresholds (default: [0.6, 0.6, 0.8, 0.9, 0.95, 1.0]) <br /> *(Note: These ratio test thresholds are for 1st to 5th layer, the last threshold (6th) are for Stage-0 and only usable when --enable_two_stage=True)*
