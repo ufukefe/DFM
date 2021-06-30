@@ -33,7 +33,7 @@ If you **do not** use conda, DFM needs the following dependencies: <br />
 Now you are ready to test DFM by the following command:
 
 ````
-python dfm.py --pairs image_pairs.txt
+python dfm.py --input_pairs image_pairs.txt
 ````
 
 <br />
