@@ -60,7 +60,7 @@ You can make changes to the following arguments in **config.yml**:
 - Use ***model*** to change the pre-trained model (default: VGG19) <br /> *(Note: DFM only supports VGG19 and VGG19_BN right now, we plan to add other backbones)*
 - Use ***ratio_th*** to change ratio test thresholds (default: [0.6, 0.6, 0.8, 0.9, 0.95, 1.0]) <br /> *(Note: These ratio test thresholds are for 1st to 5th layer, the last threshold (6th) are for Stage-0 and only usable when --enable_two_stage=True)*
 - Use ***bidirectional*** to enable or disable bidirectional ratio test. (default: True) <br /> *(Note: Make it enable to find more robust matches. Naturally, it should be enabled, make it False is only for similar results with DFM-MATLAB repository since MATLAB's matchFeatures function does not execute ratio test in a bidirectional way)*
-- Use ***display_results*** to enable or disable displaying results (default: 0) <br /> *(Note: It may slow down the algorithm.)*
+- Use ***display_results*** to enable or disable displaying results (default: True) <br /> *(Note: If True, DFM saves matched image pairs to output_directory. It may slow down the algorithm.)*
 - Use ***output_directory*** to define output directory. (default: ./results) <br /> *(Note: imageA_imageB_matches.npz will be created in output_directory for each image pair)*
 
 ## Evaluation
