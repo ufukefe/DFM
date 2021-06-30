@@ -12,7 +12,7 @@ Pytorch implementation of our paper DFM: A Performance Baseline for Deep Feature
 We strongly recommend using Anaconda. Open a terminal in ./python folder, and simply run the following lines to create the environment:
 
 ````
-conda env create -f dfm.yml
+conda env create -f environment.yml
 conda activte dfm
 ````
 **Dependencies** <br />
