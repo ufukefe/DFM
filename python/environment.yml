@@ -1,7 +1,6 @@
 name: dfm
 channels:
   - pytorch
-  - conda-forge
   - defaults
 dependencies:
   - python==3.7.1
