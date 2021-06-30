@@ -50,7 +50,7 @@ You should make the **image_pairs.txt** file as following: <br /> <br />
 
 If you want to run DFM with a specific configuration, run the following command:
 ````
-python dfm.py --pairs image_pairs.txt --config config.yml
+python dfm.py --input_pairs image_pairs.txt --config config.yml
 ````
 
 <br />
