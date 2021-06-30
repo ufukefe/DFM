@@ -5,8 +5,7 @@ Python (Pytorch) implementation of our paper DFM: A Performance Baseline for Dee
 [Paper (CVF)](https://openaccess.thecvf.com/content/CVPR2021W/IMW/papers/Efe_DFM_A_Performance_Baseline_for_Deep_Feature_Matching_CVPRW_2021_paper.pdf) | [Paper (arXiv)](https://arxiv.org/abs/2106.07791) <br />
 [Presentation (live)](https://youtu.be/9cVV9m_b5Ys?t=9170) | [Presentation (recording)](https://www.youtube.com/watch?v=9oN09WkTwvo)
 
-**Notice** <br />
-To reproduce our results given in the paper, use our DFM-Matlab repository. <br /> <br /> *You can get more accurate results (but with fewer features) using Python implementation. It is mainly because MATLAB’s [matchFeatures](https://www.mathworks.com/help/vision/ref/matchfeatures.html) function does not execute ratio test in a bidirectional way, where our Python implementation performs bidirectional ratio test. Nevertheless, we made bidirectionality adjustable in our Python implementation.*
+![Overview](hierarchical_refinement.gif)
 
 ## Setup Environment
 
@@ -49,3 +48,19 @@ Currently, we have support evaluation only on the HPatches dataset.
 You can use our Image Matching Evaluation repository, in which we have support to evaluate SuperPoint, SuperGlue, Patch2Pix, and DFM algorithms on HPatches.
 Also, you can use our DFM-Matlab repository to reproduce the results presented in the paper.
 
+## BibTeX Citation
+Please cite our paper if you use the code:
+
+```
+@InProceedings{Efe_2021_CVPR,
+    author    = {Efe, Ufuk and Ince, Kutalmis Gokalp and Alatan, Aydin},
+    title     = {DFM: A Performance Baseline for Deep Feature Matching},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) Workshops},
+    month     = {June},
+    year      = {2021},
+    pages     = {4284-4293}
+}
+```
+
+**Notice** <br />
+To reproduce our results given in the paper, use our DFM-Matlab repository. <br /> <br /> *You can get more accurate results (but with fewer features) using Python implementation. It is mainly because MATLAB’s [matchFeatures](https://www.mathworks.com/help/vision/ref/matchfeatures.html) function does not execute ratio test in a bidirectional way, where our Python implementation performs bidirectional ratio test. Nevertheless, we made bidirectionality adjustable in our Python implementation.*
