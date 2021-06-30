@@ -47,15 +47,7 @@ You should make the **image_pairs.txt** file as following: <br /> <br />
 <path_of_image***n***A> <path_of_image***n***B>
 <br /> <br />
 
-
-If you want to run DFM with a specific configuration, run the following command:
-````
-python dfm.py --input_pairs image_pairs.txt --config config.yml
-````
-
-<br />
-
-You can make changes to the following arguments in **config.yml**:
+If you want to run DFM with a specific configuration, you can make changes to the following arguments in **config.yml**:
 - Use ***enable_two_stage*** to enable or disable two stage approach (default: True) <br /> *(Note: Make it enable for planar scenes with significant viewpoint changes, otherwise disable.)*
 - Use ***model*** to change the pre-trained model (default: VGG19) <br /> *(Note: DFM only supports VGG19 and VGG19_BN right now, we plan to add other backbones)*
 - Use ***ratio_th*** to change ratio test thresholds (default: [0.6, 0.6, 0.8, 0.9, 0.95, 1.0]) <br /> *(Note: These ratio test thresholds are for 1st to 5th layer, the last threshold (6th) are for Stage-0 and only usable when --enable_two_stage=True)*
