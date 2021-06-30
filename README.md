@@ -19,15 +19,15 @@ conda activte dfm
 If you **do not** use conda, DFM needs the following dependencies: <br />
 (Versions are not strict; however, we have tried DFM with these specific versions.)
 
-- python==3.7.1
-- pytorch==1.7.1
-- torchvision==0.8.2
-- cudatoolkit==11.0
-- matplotlib==3.3.4
-- pillow==8.2.0
-- opencv==3.4.2
-- ipykernel==5.3.4
-- pyyaml==5.4.1
+- python=3.7.1
+- pytorch=1.7.1
+- torchvision=0.8.2
+- cudatoolkit=11.0
+- matplotlib=3.3.4
+- pillow=8.2.0
+- opencv=3.4.2
+- ipykernel=5.3.4
+- pyyaml=5.4.1
 
 ## Enjoy with DFM!
 Now you are ready to test DFM by the following command:
