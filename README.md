@@ -1,6 +1,6 @@
-# **DFM-Python**
+# DFM: A Performance Baseline for Deep Feature Matching
 
-Pytorch implementation of our paper DFM: A Performance Baseline for Deep Feature Matching at [CVPR 2021 Image Matching Workshop](https://image-matching-workshop.github.io/).
+Python (Pytorch) and Matlab (MatConvNet) implementations of our paper DFM: A Performance Baseline for Deep Feature Matching at [CVPR 2021 Image Matching Workshop](https://image-matching-workshop.github.io/).
 
 [Paper (CVF)](https://openaccess.thecvf.com/content/CVPR2021W/IMW/papers/Efe_DFM_A_Performance_Baseline_for_Deep_Feature_Matching_CVPRW_2021_paper.pdf) | [Paper (arXiv)](https://arxiv.org/abs/2106.07791) <br />
 [Presentation (live)](https://youtu.be/9cVV9m_b5Ys?t=9170) | [Presentation (recording)](https://www.youtube.com/watch?v=9oN09WkTwvo)
@@ -59,6 +59,10 @@ If you want to run DFM with a specific configuration, you can make changes to th
 Currently, we have support evaluation only on the HPatches dataset.
 You can use our Image Matching Evaluation repository, in which we have support to evaluate SuperPoint, SuperGlue, Patch2Pix, and DFM algorithms on HPatches.
 Also, you can use our DFM-Matlab repository to reproduce the results presented in the paper.
+
+## For Matlab Users
+Coming soon
+
 
 ## BibTeX Citation
 Please cite our paper if you use the code:
