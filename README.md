@@ -64,8 +64,6 @@ You can make changes to the following arguments in **config.xml**:
 - Use ***display_results*** to enable or disable displaying results (default: 0) <br /> *(Note: It may slow down the algorithm.)*
 - Use ***output_directory*** to define output directory. (default: ./results) <br /> *(Note: imageA_imageB_matches.npz will be created in output_directory for each image pair)*
 
-
-
 ## Evaluation
 Currently, we have support evaluation only on the HPatches dataset.
 You can use our Image Matching Evaluation repository, in which we have support to evaluate SuperPoint, SuperGlue, Patch2Pix, and DFM algorithms on HPatches.
@@ -85,5 +83,5 @@ Please cite our paper if you use the code:
 }
 ```
 
-**Notice** <br />
-To reproduce our results given in the paper, use our DFM-Matlab repository. <br /> <br /> *You can get more accurate results (but with fewer features) using Python implementation. It is mainly because MATLAB’s [matchFeatures](https://www.mathworks.com/help/vision/ref/matchfeatures.html) function does not execute ratio test in a bidirectional way, where our Python implementation performs bidirectional ratio test. Nevertheless, we made bidirectionality adjustable in our Python implementation as well.*
+## Notice
+To reproduce our results given in the paper, use our DFM-Matlab repository. <br /> *You can get more accurate results (but with fewer features) using Python implementation. It is mainly because MATLAB’s [matchFeatures](https://www.mathworks.com/help/vision/ref/matchfeatures.html) function does not execute ratio test in a bidirectional way, where our Python implementation performs bidirectional ratio test. Nevertheless, we made bidirectionality adjustable in our Python implementation as well.*
