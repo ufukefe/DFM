@@ -1,7 +1,7 @@
 configuration:
     enable_two_stage: True
     model: 'VGG19'
-    ratio_th: [0.6, 0.6, 0.8, 0.9, 0.95, 1.0]
+    ratio_th: [0.9, 0.9, 0.9, 0.9, 0.95, 1.0]
     bidirectional: True
     display_results: True
     output_directory: 'results'
