@@ -1,0 +1,1 @@
+Download HPatches sequences from http://icvl.ee.ic.ac.uk/vbalnt/hpatches/hpatches-sequences-release.tar.gz and extract here.
