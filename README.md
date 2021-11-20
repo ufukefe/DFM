@@ -56,8 +56,7 @@ If you want to run DFM with a specific configuration, you can make changes to th
 - Use ***output_directory*** to define output directory. (default: 'results') <br /> *(Note: imageA_imageB_matches.npz will be created in output_directory for each image pair.)*
 
 ## Evaluation
-Currently, we do not have support evaluation for our Python implementation.
-You can use our Image Matching Evaluation repository (coming soon), in which we have support to evaluate SuperPoint, SuperGlue, Patch2Pix, and DFM algorithms on HPatches.
+You can use our [Image Matching Evaluation (IME) repository](https://github.com/ufukefe/IME), in which we have support to evaluate DFM and 8 additional algorithms which are SIFT, SURF, ORB, KAZE, AKAZE, SuperPoint, SuperGlue and Patch2Pix on HPatches dataset.
 Also, you can use our Matlab implementation (see [For Matlab Users](#for-matlab-users) section) to reproduce the results presented in the paper.
 
 ## Notice
