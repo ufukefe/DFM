@@ -7,7 +7,7 @@ Python (Pytorch) and Matlab (MatConvNet) implementations of our paper DFM: A Per
 
 ![Overview](hierarchical_refinement.gif)
 
-## Setup Environment
+## Environment Setup
 
 We strongly recommend using Anaconda. Open a terminal in ./python folder, and simply run the following lines to create the environment:
 
