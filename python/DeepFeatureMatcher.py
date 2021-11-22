@@ -76,7 +76,7 @@ class DeepFeatureMatcher(torch.nn.Module):
             dst = points_A.t().numpy()
             
             if points_A.size(1) >= 4:
-                H_init, _ = cv.findHomography(src, dst, method=cv.RANSAC, ransacReprojThreshold=16*np.sqrt(2)+1, maxIters=5000, confidence=0.9999)
+                H_init, _ = cv.findHomography(src, dst, method=cv.USAC_MAGSAC, ransacReprojThreshold=16*np.sqrt(2)+1, maxIters=5000, confidence=0.9999)
                
             # opencv might return None for H, check for None
             H_init = np.eye(3, dtype=np.double) if H_init is None else H_init
@@ -136,7 +136,7 @@ class DeepFeatureMatcher(torch.nn.Module):
         dst = points_A.t().numpy()
         
         if points_A.size(1) >= 4:
-            H, _ = cv.findHomography(src, dst, method=cv.RANSAC, ransacReprojThreshold=3.0, maxIters=5000, confidence=0.9999)
+            H, _ = cv.findHomography(src, dst, method=cv.USAC_MAGSAC, ransacReprojThreshold=3.0, maxIters=5000, confidence=0.9999)
           
         # opencv might return None for H, check for None
         H = np.eye(3, dtype=np.double) if H is None else H
