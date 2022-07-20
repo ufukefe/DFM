@@ -13,7 +13,7 @@ We strongly recommend using Anaconda. Open a terminal in ./python folder, and si
 
 ````
 conda env create -f environment.yml
-conda activte dfm
+conda activate dfm
 ````
 **Dependencies** <br />
 If you **do not** use conda, DFM needs the following dependencies: <br />
